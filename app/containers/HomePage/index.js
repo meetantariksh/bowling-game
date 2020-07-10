@@ -5,14 +5,44 @@
  *
  */
 
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import React, { useState } from 'react';
+import Navbar from 'react-bootstrap/Navbar';
+// import Person from '../../ObjectPrototypes/Person';
+import GameInitiator from '../../components/GameInitiator';
+import WelcomeBanner from '../../components/WelcomeBanner';
+import ScoreBoard from '../../components/ScoreBoard/Loadable';
+
+const person = [];
 
 export default function HomePage() {
+  const [isGameStarted, setGameStatus] = useState(false);
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+  const resetGame = () => {
+    person.length = 0;
+  };
   return (
-    <h1>
-      <FormattedMessage {...messages.header} />
-    </h1>
+    <div>
+      <Navbar bg="dark" variant="dark">
+        <Navbar.Brand>Bowling Game Calculator</Navbar.Brand>
+      </Navbar>
+      <WelcomeBanner gameStatus={isGameStarted} />
+      <div style={{ marginLeft: '10%', marginRight: '10%' }}>
+        <GameInitiator
+          person={person}
+          gameStatus={isGameStarted}
+          setGameStatus={setGameStatus}
+          resetGame={resetGame}
+          currentPlayerIndex={currentPlayerIndex}
+        />
+        <br />
+        {person.map((player, index) => (
+          <ScoreBoard
+            player={player}
+            isActive={currentPlayerIndex === index}
+            index={index + 1}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
