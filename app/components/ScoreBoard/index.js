@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Table } from 'react-bootstrap';
@@ -17,7 +17,7 @@ function ScoreBoard(props) {
   const getFrameVal = (frame, index) => {
     if (frame) {
       if (frame.frame && frame.frame[index]) {
-        return frame.frame[index];
+        return frame.frame[index].roll;
       }
       return '-';
     }
@@ -79,4 +79,4 @@ ScoreBoard.propTypes = {
   index: PropTypes.number,
 };
 
-export default memo(ScoreBoard);
+export default ScoreBoard;

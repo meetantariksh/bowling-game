@@ -17,8 +17,10 @@ const person = [];
 export default function HomePage() {
   const [isGameStarted, setGameStatus] = useState(false);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+  const [counter, setCounter] = useState(0);
   const resetGame = () => {
     person.length = 0;
+    setCurrentPlayerIndex(0);
   };
   return (
     <div>
@@ -33,6 +35,9 @@ export default function HomePage() {
           setGameStatus={setGameStatus}
           resetGame={resetGame}
           currentPlayerIndex={currentPlayerIndex}
+          setCurrentPlayerIndex={setCurrentPlayerIndex}
+          counter={counter}
+          setCounter={setCounter}
         />
         <br />
         {person.map((player, index) => (

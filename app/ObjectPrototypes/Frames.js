@@ -1,4 +1,5 @@
 import Rolls from './Rolls';
+import RollValues from './RollValues';
 
 class Frames {
   constructor() {
@@ -13,26 +14,36 @@ class Frames {
   setRoll(roll) {
     const returnRoll = new Rolls();
     if (this.frame.length > 0 && !this.isFrameComplete) {
-      const sum = this.frame[0] + roll;
+      const sum = parseInt(this.frame[0].roll, 10) + roll;
       if (sum === 10) {
         this.hasSpare = true;
         this.isFrameComplete = true;
-        returnRoll.roll('/');
+        returnRoll.roll = '/';
         this.frame.push(returnRoll);
+        return returnRoll;
       }
-    } else if (roll === 10) {
+      this.isFrameComplete = true;
+      returnRoll.roll = roll;
+      this.frame.push(returnRoll);
+      return returnRoll;
+    }
+    if (roll === 10) {
       this.hasStrike = true;
       this.isFrameComplete = true;
-      returnRoll.roll('X');
+      returnRoll.roll = 'X';
       this.frame.push(returnRoll);
-    } else {
-      returnRoll.roll(roll);
-      for (let i = 1; i <= 10 - roll; ) {
-        returnRoll.availableRolls.push(i);
-        i += 1;
-      }
-      this.frame.push(roll);
+      return returnRoll;
     }
+    returnRoll.roll = roll;
+    returnRoll.availableRolls = {};
+    for (let i = 1; i <= 10 - roll; ) {
+      returnRoll.availableRolls = {
+        ...returnRoll.availableRolls,
+        [i]: RollValues[i],
+      };
+      i += 1;
+    }
+    this.frame.push(returnRoll);
     return returnRoll;
   }
 }

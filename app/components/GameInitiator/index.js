@@ -20,6 +20,9 @@ import Person from '../../ObjectPrototypes/Person';
 
 function GameInitiator(props) {
   const [name, setName] = useState('');
+  const availableRolls = props.gameStatus
+    ? props.person[props.currentPlayerIndex].getAvailableRolls()
+    : {};
   return (
     <div>
       <Navbar bg="light" expand="lg">
@@ -31,10 +34,27 @@ function GameInitiator(props) {
         {!props.gameStatus && <Nav className="mr-auto" />}
         {props.gameStatus && (
           <Nav className="mr-auto">
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item>Action</NavDropdown.Item>
-              <NavDropdown.Item>Another action</NavDropdown.Item>
-              <NavDropdown.Item>Something</NavDropdown.Item>
+            <NavDropdown title="Select your roll" id="basic-nav-dropdown">
+              {Object.keys(availableRolls).map(key => (
+                <NavDropdown.Item
+                  onClick={() => {
+                    const frame = props.person[
+                      props.currentPlayerIndex
+                    ].setRoll(key);
+                    if (frame.isFrameComplete) {
+                      props.setCurrentPlayerIndex(
+                        props.person.length - 1 === props.currentPlayerIndex
+                          ? 0
+                          : props.currentPlayerIndex + 1,
+                      );
+                    } else {
+                      props.setCounter(props.counter + 1);
+                    }
+                  }}
+                >
+                  {availableRolls[key]}
+                </NavDropdown.Item>
+              ))}
             </NavDropdown>
 
             <Button variant="outline-success" onClick={() => {}}>
@@ -74,7 +94,7 @@ function GameInitiator(props) {
 
           <Button
             style={{ marginLeft: '5px' }}
-            variant={props.gameStatus ? "outline-danger" : "outline-success"}
+            variant={props.gameStatus ? 'outline-danger' : 'outline-success'}
             onClick={() => {
               if (props.gameStatus) {
                 props.resetGame();
@@ -96,6 +116,9 @@ GameInitiator.propTypes = {
   resetGame: PropTypes.func,
   gameStatus: PropTypes.bool,
   currentPlayerIndex: PropTypes.number,
+  setCurrentPlayerIndex: PropTypes.func,
+  counter: PropTypes.number,
+  setCounter: PropTypes.func,
 };
 
 export default memo(GameInitiator);
