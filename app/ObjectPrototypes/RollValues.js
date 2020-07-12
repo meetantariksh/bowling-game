@@ -1,4 +1,5 @@
-const rollValues = {
+const rollValues = (isSeccondRoll = false) => ({
+  0: 'Gutter Ball',
   1: 'One',
   2: 'Two',
   3: 'Three',
@@ -8,7 +9,7 @@ const rollValues = {
   7: 'Seven',
   8: 'Eight',
   9: 'Nine',
-  10: 'Strike',
-};
+  10: isSeccondRoll ? 'Spare' : 'Strike',
+});
 
 export default rollValues;
