@@ -37,7 +37,6 @@ class Frames {
     returnRoll.roll = roll;
     returnRoll.availableRolls = {};
     const rollVal = RollValues(true);
-    console.log(rollVal);
     for (let i = 0; i <= 10 - roll; ) {
       returnRoll.availableRolls = {
         ...returnRoll.availableRolls,
