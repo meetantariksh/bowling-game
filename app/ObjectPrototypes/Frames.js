@@ -31,6 +31,7 @@ class Frames {
       this.hasStrike = true;
       this.isFrameComplete = true;
       returnRoll.roll = 'X';
+      returnRoll.availableRolls = RollValues(false);
       this.frame.push(returnRoll);
       return returnRoll;
     }
@@ -45,6 +46,63 @@ class Frames {
       i += 1;
     }
     this.frame.push(returnRoll);
+    return returnRoll;
+  }
+
+  setFinalFrame(roll) {
+    let score = 0;
+    const returnRoll = new Rolls();
+    if (this.frame.length === 1) {
+      if (this.hasStrike) {
+        if (roll === 10) {
+          returnRoll.roll = 'X';
+          returnRoll.availableRolls = RollValues(false);
+          return returnRoll;
+        }
+        returnRoll.roll = roll;
+        const rollVal = RollValues(true);
+        for (let i = 0; i <= 10 - roll; ) {
+          returnRoll.availableRolls = {
+            ...returnRoll.availableRolls,
+            [i]: rollVal[i],
+          };
+          i += 1;
+        }
+        this.frame.push(returnRoll);
+        return returnRoll;
+      }
+      score = parseInt(this.frame[0].roll, 10) + roll;
+      if (score === 10) {
+        this.hasSpare = true;
+        returnRoll.roll = '/';
+        returnRoll.availableRolls = RollValues(false);
+        this.frame.push(returnRoll);
+        return returnRoll;
+      }
+      this.isFrameComplete = true;
+      this.frameScore = score;
+      this.isFrameScoreCalculated = true;
+      return returnRoll;
+    }
+    if (this.hasSpare) {
+      returnRoll.roll = roll === 10 ? 'X' : roll;
+      this.isFrameComplete = true;
+      this.frameScore = roll + 10;
+      this.isFrameScoreCalculated = true;
+      return returnRoll;
+    }
+    if (this.hasStrike && this.frame[0].roll === 'X') {
+      returnRoll.roll = roll === 10 ? 'X' : roll;
+      this.frameScore = roll + 20;
+      this.isFrameComplete = true;
+      this.isFrameScoreCalculated = true;
+      return returnRoll;
+    }
+    score = parseInt(this.frame[1].roll, 10) + roll;
+    this.frameScore = score;
+    returnRoll.roll = score === 10 ? '/' : roll;
+    this.isFrameComplete = true;
+    this.isFrameScoreCalculated = true;
     return returnRoll;
   }
 }

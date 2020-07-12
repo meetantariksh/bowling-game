@@ -58,13 +58,23 @@ function ScoreBoard(props) {
         bordered
         hover
         variant={props.isActive ? 'dark' : 'light'}
-        style={{ minWidth: 'max-content' }}
+        style={{
+          minWidth: 'max-content',
+          backgroundColor: props.player.gameComplete ? '#ace134' : '',
+        }}
       >
         <tbody>
           <tr>
             <td>{props.index}</td>
             <td>{props.player.name}</td>
             {score}
+            {props.player.gameComplete && (
+              <td>
+                Game Completed
+                <br />
+                <b>{props.player.totalScore}</b>
+              </td>
+            )}
             <td>Game in Progress</td>
           </tr>
         </tbody>

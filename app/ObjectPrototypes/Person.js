@@ -6,6 +6,7 @@ class Person {
     this.name = name;
     this.frames = [];
     this.gameComplete = false;
+    this.totalScore = 0;
   }
 
   setFrames(frame) {
@@ -25,12 +26,15 @@ class Person {
 
   setRoll(input) {
     const roll = parseInt(input, 10);
-    if (this.frames && this.frames.length !== 0) {
+    if (this.frames && this.frames.length > 0 && this.frames.length < 10) {
       if (this.frames[this.frames.length - 1].isFrameComplete) {
         const frame = new Frame();
         frame.setRoll(roll);
         this.setFrames(frame);
         this.calculateFrameScore();
+        if (this.frames.length === 10) {
+          this.frames[9].isFrameComplete = false;
+        }
         return frame;
       }
       const frame = this.frames[this.frames.length - 1];
@@ -38,9 +42,30 @@ class Person {
       this.calculateFrameScore();
       return frame;
     }
+    if (this.frames.length === 10) {
+      return this.rollLastFrame(roll);
+    }
     const frame = new Frame();
     frame.setRoll(roll);
     this.setFrames(frame);
+    return frame;
+  }
+
+  rollLastFrame(roll) {
+    const frame = this.frames[9];
+    let score = 0;
+    if (this.frames[8].hasStrike && !this.frames[8].isFrameScoreCalculated) {
+      const temp = frame.hasStrike ? 10 : frame.frame[0];
+      score = this.frames[7].frameScore + 10 + temp + roll;
+      this.frames[8].frameScore = score;
+      this.frames[8].isFrameScoreCalculated = true;
+    }
+    frame.setFinalFrame(roll);
+    if (frame.isFrameComplete) {
+      this.gameComplete = true;
+      frame.frameScore = this.frames[8].frameScore + frame.frameScore;
+      this.totalScore = frame.frameScore;
+    }
     return frame;
   }
 

@@ -23,16 +23,22 @@ function GameInitiator(props) {
   const availableRolls = props.gameStatus
     ? props.person[props.currentPlayerIndex].getAvailableRolls()
     : {};
+
+  const getBrand = () => {
+    if (props.gameStatus && !props.isGameCompleted) {
+      return `Active Player: ${props.person[props.currentPlayerIndex].name}`;
+    }
+    if (props.isGameCompleted) {
+      return `Game Completed`;
+    }
+    return 'Add your players';
+  };
   return (
     <div>
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand>
-          {props.gameStatus
-            ? `Active Player: ${props.person[props.currentPlayerIndex].name}`
-            : 'Add your players'}
-        </Navbar.Brand>
+        <Navbar.Brand>{getBrand()}</Navbar.Brand>
         {!props.gameStatus && <Nav className="mr-auto" />}
-        {props.gameStatus && (
+        {props.gameStatus && !props.isGameCompleted && (
           <Nav className="mr-auto">
             <NavDropdown title="Select your roll" id="basic-nav-dropdown">
               {Object.keys(availableRolls).map(key => (
@@ -42,11 +48,23 @@ function GameInitiator(props) {
                       props.currentPlayerIndex
                     ].setRoll(key);
                     if (frame.isFrameComplete) {
-                      props.setCurrentPlayerIndex(
+                      const playerIndex =
                         props.person.length - 1 === props.currentPlayerIndex
                           ? 0
-                          : props.currentPlayerIndex + 1,
-                      );
+                          : props.currentPlayerIndex + 1;
+                      if (props.person[playerIndex].gameComplete) {
+                        props.person.sort(
+                          (a, b) => b.totalScore - a.totalScore,
+                        );
+                        props.setGameCompleted({
+                          gameCompleted: true,
+                          winner: props.person[0].name,
+                          loser: props.person[props.person.length - 1].name,
+                        });
+                      } else {
+                        props.setCurrentPlayerIndex(playerIndex);
+                        props.setCounter(props.counter + 1);
+                      }
                     } else {
                       props.setCounter(props.counter + 1);
                     }
@@ -119,6 +137,8 @@ GameInitiator.propTypes = {
   setCurrentPlayerIndex: PropTypes.func,
   counter: PropTypes.number,
   setCounter: PropTypes.func,
+  isGameCompleted: PropTypes.bool,
+  setGameCompleted: PropTypes.func,
 };
 
 export default memo(GameInitiator);
