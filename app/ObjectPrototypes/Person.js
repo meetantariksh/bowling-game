@@ -55,7 +55,7 @@ class Person {
     const frame = this.frames[9];
     let score = 0;
     if (this.frames[8].hasStrike && !this.frames[8].isFrameScoreCalculated) {
-      const temp = frame.hasStrike ? 10 : frame.frame[0];
+      const temp = frame.hasStrike ? 10 : parseInt(frame.frame[0].roll, 10);
       score = this.frames[7].frameScore + 10 + temp + roll;
       this.frames[8].frameScore = score;
       this.frames[8].isFrameScoreCalculated = true;

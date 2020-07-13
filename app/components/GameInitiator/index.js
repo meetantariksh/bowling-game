@@ -102,6 +102,7 @@ function GameInitiator(props) {
                   const player = new Person();
                   player.name = temp;
                   props.person.push(player);
+                  props.setCounter(props.counter + 1);
                   setName('');
                 }}
               >
@@ -119,6 +120,7 @@ function GameInitiator(props) {
               }
               props.setGameStatus(!props.gameStatus);
             }}
+            disabled={props.person.length === 0}
           >
             {props.gameStatus ? 'Reset current game' : 'Start the Game'}
           </Button>

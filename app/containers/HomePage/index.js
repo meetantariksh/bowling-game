@@ -37,7 +37,7 @@ export default function HomePage() {
         gameStatus={isGameStarted}
         isGameCompleted={isGameCompleted.gameCompleted}
         winner={isGameCompleted.winner}
-        loser={isGameCompleted.looser}
+        loser={isGameCompleted.loser}
       />
       <div style={{ marginLeft: '10%', marginRight: '10%' }}>
         <GameInitiator

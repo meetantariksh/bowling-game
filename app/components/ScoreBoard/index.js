@@ -57,7 +57,9 @@ function ScoreBoard(props) {
         striped
         bordered
         hover
-        variant={props.isActive ? 'dark' : 'light'}
+        variant={
+          props.isActive && !props.player.gameComplete ? 'dark' : 'light'
+        }
         style={{
           minWidth: 'max-content',
           backgroundColor: props.player.gameComplete ? '#ace134' : '',
@@ -75,7 +77,7 @@ function ScoreBoard(props) {
                 <b>{props.player.totalScore}</b>
               </td>
             )}
-            <td>Game in Progress</td>
+            {!props.player.gameComplete && <td>Game in Progress</td>}
           </tr>
         </tbody>
       </Table>

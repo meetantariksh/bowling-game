@@ -57,6 +57,7 @@ class Frames {
         if (roll === 10) {
           returnRoll.roll = 'X';
           returnRoll.availableRolls = RollValues(false);
+          this.frame.push(returnRoll);
           return returnRoll;
         }
         returnRoll.roll = roll;
@@ -81,7 +82,9 @@ class Frames {
       }
       this.isFrameComplete = true;
       this.frameScore = score;
+      returnRoll.roll = roll;
       this.isFrameScoreCalculated = true;
+      this.frame.push(returnRoll);
       return returnRoll;
     }
     if (this.hasSpare) {
@@ -89,20 +92,23 @@ class Frames {
       this.isFrameComplete = true;
       this.frameScore = roll + 10;
       this.isFrameScoreCalculated = true;
+      this.frame.push(returnRoll);
       return returnRoll;
     }
-    if (this.hasStrike && this.frame[0].roll === 'X') {
+    if (this.frame[1].roll === 'X') {
       returnRoll.roll = roll === 10 ? 'X' : roll;
       this.frameScore = roll + 20;
       this.isFrameComplete = true;
       this.isFrameScoreCalculated = true;
+      this.frame.push(returnRoll);
       return returnRoll;
     }
-    score = parseInt(this.frame[1].roll, 10) + roll;
+    score = parseInt(this.frame[1].roll, 10) + roll + 10;
     this.frameScore = score;
-    returnRoll.roll = score === 10 ? '/' : roll;
+    returnRoll.roll = score === 20 ? '/' : roll;
     this.isFrameComplete = true;
     this.isFrameScoreCalculated = true;
+    this.frame.push(returnRoll);
     return returnRoll;
   }
 }
